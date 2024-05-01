@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const db = require('./db/index');
 const userroute=require('./routes/registeruser.js')
-const loginroute=require("./controllers/logincontroller.js")
+
 const cors=require('cors')
 
 // middlewares
@@ -13,9 +13,9 @@ app.use("/", userroute);
 
 db.connect();
 
-app.get("/", (req, res) => {
-    res.send("Hello World");
-})
+// app.get("/", (req, res) => {
+//     res.send("Hello World");
+// })
 
 
 app.listen(8000, () => {

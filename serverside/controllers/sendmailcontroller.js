@@ -1,12 +1,14 @@
 const user = require("../models/user.js");
 const nodemailer = require('nodemailer')
-
+const jwt = require('jsonwebtoken');
 async function sendmail(req, res, next) {
     try {
         const { email } = req.body;
         if (!email) {
             return res.status(400).json({ message: "Email is required" });
         }
+        const token = jwt.sign({ email }, "sanjaymawa")
+        // const url = `http://localhost:3000/reset-password?id=${token}`
         if (await user.findOne({ email })) {
             const transpoter = nodemailer.createTransport({
                 service: "gmail",
@@ -21,9 +23,8 @@ async function sendmail(req, res, next) {
                 to: email,
                 subject: "reset password",
                 text: "click on the link below to reset your password",
-                html: `<a href="http://localhost:3000/reset-password">click here</a>`
+                html: `<a href="http://localhost:3000/reset-password?id=${token}">click here</a>`
             })
-            console.log(info)
             return res.status(200).json({ message: "Email sent successfully" });
         }
     } catch (error) {
